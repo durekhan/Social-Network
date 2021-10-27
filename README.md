@@ -38,3 +38,4 @@ DB_URL=`mongodb+srv://durekhan:TomAndJerry@cluster0.6lpgs.mongodb.net/social-net
 `npm run start:dev`
 
 ## **Database Design**
+![db-design](https://user-images.githubusercontent.com/90218712/139103489-e97b6813-8ee9-4ba5-92ec-18c0bdd49607.png)
