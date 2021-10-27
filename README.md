@@ -24,6 +24,17 @@ This project is bootstrapped with https://nestjs.com/
 ## **Setup Instructions**
 Clone the repo and install the dependencies.
 
-npm install
+`npm install`
 
-Create .env file in the project root
+`Create .env file in the project root`
+
+`Add these credentials in .env file`
+
+`secret='super-secret'
+DB_URL=`mongodb+srv://durekhan:TomAndJerry@cluster0.6lpgs.mongodb.net/social-network`
+
+## **Running on local**
+
+`npm run start:dev`
+
+## **Database Design**
