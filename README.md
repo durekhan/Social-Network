@@ -31,7 +31,7 @@ Clone the repo and install the dependencies.
 `Add these credentials in .env file`
 
 `secret='super-secret'
-DB_URL=`mongodb+srv://durekhan:TomAndJerry@cluster0.6lpgs.mongodb.net/social-network`
+DB_URL=`mongodb+srv://`
 
 ## **Running on local**
 
