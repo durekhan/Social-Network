@@ -59,7 +59,11 @@ export class UserController {
   @ApiBadRequestResponse({ description: 'Email not provided' })
   @ApiBody({ type: CreateLoginDto })
   async signIn(@Body(new ValidationPipe()) createUserDto: CreateLoginDto) {
-    return this.userService.signIn(createUserDto.email, createUserDto.password);
+    const result = await this.userService.signIn(
+      createUserDto.email,
+      createUserDto.password,
+    );
+    return result;
   }
   @Get('/total')
   @ApiOkResponse({ description: 'Users Retrieved' })
@@ -67,10 +71,7 @@ export class UserController {
   async getUsers(
     @Query('offset') offset: string,
     @Query('limit') limit: string,
-    // @Param('offset') offset: string,
-    // @Param('limit') limit: string,
   ) {
-    //console.log(offset + ' ' + limit);
     return await this.userService.getUsers(offset, limit);
   }
   @Put('/follow/:id')

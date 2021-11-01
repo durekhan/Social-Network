@@ -15,6 +15,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthMiddleware } from './auth/middleware/auth.middleware';
 import { UserController } from './user/user.controller';
 import { PostController } from './post/post.controller';
+import { AppGateway } from './app.gateway';
 @Module({
   imports: [
     PassportModule,
@@ -25,7 +26,7 @@ import { PostController } from './post/post.controller';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppGateway],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

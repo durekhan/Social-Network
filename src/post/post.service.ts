@@ -13,6 +13,7 @@ export class PostService {
       content: content,
       user: userId,
     });
+    //console.log(newPost);
     return await newPost.save();
   }
   async getFeedData(
@@ -57,7 +58,7 @@ export class PostService {
         post: posts,
         pageNo: page,
       };
-      return object;
+      return posts;
     } catch (err) {
       return { error: err.message };
     }

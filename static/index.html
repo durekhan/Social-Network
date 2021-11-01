@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <div id="v-app">
+      <h1>{{title}}</h1>
+      <form>
+        <h3>email</h3>
+        <input v-model="email" type="text" />
+        <h3>password</h3>
+        <input v-model="password" type="text" />
+        <button type="submit" @click.prevent="loginMethod()">Login</button>
+        <h1>User Feed</h1>
+        <ul>
+          <li v-for="post of posts">{{post}}</li>
+        </ul>
+      </form>
+    </div>
+
+    <script>
+      var app = new Vue({
+  el: '#v-app',
+  data: {
+    title: 'websockets',
+    email: '',
+    password: '',
+    socket: null,
+    posts: [],
+  },
+  methods: {
+    async loginMethod() {
+      const res =  await fetch('http://localhost:3000/user/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: this.email,
+          password: this.password,
+        }),
+        headers: { 'Content-type': 'application/json' },
+      });
+      const resp = await res.json();
+      console.log(resp['accessToken']);
+      console.log(resp['userId']);
+      this.socket.emit('newUser',resp['userId']);
+      const feed = await fetch('http://localhost:3000/user/feed?keyword=steak&offset=1&limit=20',{
+        method: 'GET',
+        headers: new Headers({
+                    Authorization: 'Bearer ' + resp['accessToken'],
+                }),
+      });
+    const feedResult = await feed.json();
+    //console.log(feedResult['feed']);
+    this.posts=feedResult['feed'];
+    //console.log(this.posts);
+      // this.socket.emit('msgToServer', {
+      //   email: this.email,
+      //   password: this.password,
+      // });
+      
+    },
+    receiveMessage(msg) {
+      //const post =await msg.json();
+      console.log(msg);
+      alert('got a message!');
+      this.posts.push(msg);
+    },
+  },
+  created() {
+    this.socket = io('http://localhost:3000');
+    this.socket.on('msgToClient', (msg) => {
+      console.log("HELLOO");
+      
+      this.receiveMessage(msg);
+    });
+  },
+});
+
+    </script>
+  </body>
+</html>

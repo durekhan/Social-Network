@@ -15,10 +15,13 @@ import {
 } from '@nestjs/swagger';
 import { CreatePostDto } from 'src/dto/post.dto';
 import { PostService } from './post.service';
-
+import { io } from 'socket.io-client';
+//import { EventEmitter2 } from '@nestjs/event-emitter';
 @Controller('post')
 export class PostController {
-  constructor(private postService: PostService) {}
+  constructor(
+    private postService: PostService, //private eventEmitter: EventEmitter2,
+  ) {}
   @Post()
   @ApiCreatedResponse({ description: 'Posted Successful' })
   @ApiBadRequestResponse({ description: 'some error occurred' })
@@ -27,9 +30,12 @@ export class PostController {
     @Request() req,
     @Body(new ValidationPipe()) postDto: CreatePostDto,
   ) {
-    console.log(req.user._id);
-    //postDto.userId = req.user._id;
+    const socket = io('http://localhost:3000');
+    console.log(req.user);
     const data = await this.postService.postData(postDto.content, req.user._id);
+    console.log(data);
+    socket.emit('msgToServer', { post: data, user: req.user });
+    //socket.emit('msgToServer', data);
     return { Post: `${postDto.content} is posted` };
   }
   @Put('/update/:id')

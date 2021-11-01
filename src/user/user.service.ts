@@ -96,7 +96,7 @@ export class UserService {
     const result = await this.matchPassword(password, user.password);
     if (result === true) {
       const token = await this.auth.generateJwt(user);
-      return { accessToken: token };
+      return { userId: user._id, username: user.username, accessToken: token };
     } else {
       return { message: 'error logging in' };
     }
@@ -133,11 +133,9 @@ export class UserService {
     return user.followings;
   }
   async validateTokenUser(username: string) {
-    //console.log(username);
     const userToValidate = await this.UserModel.findOne({ username }).select(
       '-password',
     );
-    //console.log("USER TOVERGG "+userToValidate);
     if (userToValidate) {
       return userToValidate;
     } else {
