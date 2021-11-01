@@ -31,7 +31,6 @@ export class PostController {
     @Body(new ValidationPipe()) postDto: CreatePostDto,
   ) {
     const socket = io('http://localhost:3000');
-    console.log(req.user);
     const data = await this.postService.postData(postDto.content, req.user._id);
     console.log(data);
     socket.emit('msgToServer', { post: data, user: req.user });

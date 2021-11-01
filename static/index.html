@@ -44,8 +44,6 @@
         headers: { 'Content-type': 'application/json' },
       });
       const resp = await res.json();
-      console.log(resp['accessToken']);
-      console.log(resp['userId']);
       this.socket.emit('newUser',resp['userId']);
       const feed = await fetch('http://localhost:3000/user/feed?keyword=steak&offset=1&limit=20',{
         method: 'GET',
@@ -54,17 +52,9 @@
                 }),
       });
     const feedResult = await feed.json();
-    //console.log(feedResult['feed']);
     this.posts=feedResult['feed'];
-    //console.log(this.posts);
-      // this.socket.emit('msgToServer', {
-      //   email: this.email,
-      //   password: this.password,
-      // });
-      
     },
     receiveMessage(msg) {
-      //const post =await msg.json();
       console.log(msg);
       alert('got a message!');
       this.posts.push(msg);
@@ -73,7 +63,6 @@
   created() {
     this.socket = io('http://localhost:3000');
     this.socket.on('msgToClient', (msg) => {
-      console.log("HELLOO");
       
       this.receiveMessage(msg);
     });

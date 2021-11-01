@@ -98,7 +98,6 @@ export class UserController {
     const offsetq = req.query.offset ? parseInt(req.query.offset) : 0;
     const limitq = req.query.limit ? parseInt(req.query.limit) : 0;
     const search = req.query.keyword ? req.query.keyword : null;
-    console.log(search);
 
     const result = await this.postService.getFeedData(
       req.user.followings,

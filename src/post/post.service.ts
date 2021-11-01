@@ -52,7 +52,6 @@ export class PostService {
         return { message: 'no posts available for this keyword' };
       }
       const count = posts.length;
-      console.log(count);
       const page = offset + '/' + Math.ceil(count / limit + 1);
       const object = {
         post: posts,
