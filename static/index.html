@@ -45,7 +45,7 @@
       });
       const resp = await res.json();
       this.socket.emit('newUser',resp['userId']);
-      const feed = await fetch('/user/feed?keyword=steak&offset=1&limit=30',{
+      const feed = await fetch('/user/feed?keyword=steak&offset=1&limit=50',{
         method: 'GET',
         headers: new Headers({
                     Authorization: 'Bearer ' + resp['accessToken'],
