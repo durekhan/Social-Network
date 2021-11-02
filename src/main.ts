@@ -7,6 +7,7 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useStaticAssets(join(__dirname, '..', 'static'));
+  app.enableCors();
   const config = new DocumentBuilder()
     .setTitle('Social Network')
     .setDescription('The social network API description')
