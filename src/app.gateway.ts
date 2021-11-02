@@ -34,6 +34,7 @@ export class AppGateway
   }
   @SubscribeMessage('msgToServer')
   handleMessage(client: Socket, @MessageBody() payload) {
+    console.log("msg came");
     const followers = payload.user.followers;
 
     for (const follower of followers) {
