@@ -38,7 +38,6 @@ export class AppGateway
 
     for (const follower of followers) {
       if (this.currentUser.get(follower)) {
-        //socket.emit('msgToClient', payload.post);
         this.server
           .to(this.currentUser.get(follower))
           .emit('msgToClient', payload.post);

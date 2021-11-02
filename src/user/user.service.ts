@@ -17,9 +17,6 @@ export class UserService {
   async followRequest(friend: string, user: string) {
     if (user !== friend) {
       try {
-        //const toFollow = await this.UserModel.findById(friend);
-        //const currentUser = await this.UserModel.findById(user);
-
         await this.UserModel.updateOne(
           { _id: friend },
           { $push: { followers: user } },

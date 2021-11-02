@@ -1,27 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import * as mongoose from 'mongoose';
 export type UserDocument = User & Document;
-// export const UserSchema = new mongoose.Schema(
-//   {
-//     username: {
-//       type: String,
-//       unique: true,
-//       required: [true, "can't be blank"],
-//       lowercase: true,
-//     },
-//     age: { type: Number, required: true },
-//     email: {
-//       type: String,
-//       unique: true,
-//       required: [true, "can't be blank"],
-//       lowercase: true,
-//     },
-//     password: { type: String, required: true },
-//     followers: { type: Array, default: [] },
-//     followings: { type: Array, default: [] },
-//   },
-//   { timestamps: true },
-// );
 
 @Schema({ timestamps: true })
 export class User {

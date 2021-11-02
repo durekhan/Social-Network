@@ -18,10 +18,6 @@ import { UserService } from './user.service';
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
     ConfigModule.forRoot(),
     AuthModule,
-    // JwtModule.register({
-    //   secret: process.env.secret,
-    //   signOptions: { expiresIn: '1d' },
-    // }),
   ],
   controllers: [UserController],
   providers: [UserService],

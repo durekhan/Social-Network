@@ -13,7 +13,6 @@ export class PostService {
       content: content,
       user: userId,
     });
-    //console.log(newPost);
     return await newPost.save();
   }
   async getFeedData(

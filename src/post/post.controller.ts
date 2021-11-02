@@ -30,11 +30,9 @@ export class PostController {
     @Request() req,
     @Body(new ValidationPipe()) postDto: CreatePostDto,
   ) {
-    const socket = io('http://localhost:3000');
+    const socket = io();
     const data = await this.postService.postData(postDto.content, req.user._id);
-    console.log(data);
     socket.emit('msgToServer', { post: data, user: req.user });
-    //socket.emit('msgToServer', data);
     return { Post: `${postDto.content} is posted` };
   }
   @Put('/update/:id')
@@ -45,7 +43,6 @@ export class PostController {
     @Param('id') id: string,
     @Body(new ValidationPipe()) postDto: CreatePostDto,
   ) {
-    console.log(id);
     return this.postService.updatePost(postDto.content, id);
   }
 

@@ -35,7 +35,7 @@
   },
   methods: {
     async loginMethod() {
-      const res =  await fetch('http://localhost:3000/user/login', {
+      const res =  await fetch('/user/login', {
         method: 'POST',
         body: JSON.stringify({
           email: this.email,
@@ -45,7 +45,7 @@
       });
       const resp = await res.json();
       this.socket.emit('newUser',resp['userId']);
-      const feed = await fetch('http://localhost:3000/user/feed?keyword=steak&offset=1&limit=20',{
+      const feed = await fetch('/user/feed?keyword=steak&offset=1&limit=30',{
         method: 'GET',
         headers: new Headers({
                     Authorization: 'Bearer ' + resp['accessToken'],
@@ -55,13 +55,12 @@
     this.posts=feedResult['feed'];
     },
     receiveMessage(msg) {
-      console.log(msg);
       alert('got a message!');
       this.posts.push(msg);
     },
   },
   created() {
-    this.socket = io('http://localhost:3000');
+    this.socket = io();
     this.socket.on('msgToClient', (msg) => {
       
       this.receiveMessage(msg);
