@@ -26,4 +26,8 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   followings: string[];
+
+  @IsOptional()
+  @IsString()
+  stripeCustomerId: string;
 }

@@ -7,13 +7,70 @@ import { JwtService } from '@nestjs/jwt';
 import { Auth } from 'src/config/auth';
 import { AuthService } from 'src/auth/auth.service';
 import { User, UserDocument } from './user.model';
+import StripeService from 'src/stripe/stripe.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel('User') private readonly UserModel: Model<User>,
     private auth: AuthService,
+    private stripeService: StripeService,
   ) {}
+  async charge(
+    amount: number,
+    paymentMethodId: string,
+    stripeCustomerId: string,
+  ) {
+    return await this.stripeService.charge(
+      amount,
+      paymentMethodId,
+      stripeCustomerId,
+    );
+  }
+  async registerPaidUser(
+    username: string,
+    age: number,
+    email: string,
+    password: string,
+  ) {
+    const stripeCustomer = await this.stripeService.createCustomer(
+      username,
+      email,
+    );
+    console.log('Stripe Customer ' + stripeCustomer.id);
+    const stripeCustomerId = stripeCustomer.id;
+    const userInDb = await this.UserModel.findOne({
+      username: username,
+      email: email,
+    }).exec();
+    if (userInDb) {
+      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+    }
+    password = await this.encryptPassword(password);
+    const newUser = new this.UserModel({
+      username,
+      age,
+      email,
+      password,
+      stripeCustomerId,
+    });
+    try {
+      const user = await newUser.save();
+      const token = await this.auth.generateJwt(user);
+      const result = {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        followers: user.followers,
+        followings: user.followings,
+        stripeCustomerId: user.stripeCustomerId,
+        accessToken: token,
+      };
+      return result;
+    } catch (err) {
+      return err;
+    }
+  }
   async followRequest(friend: string, user: string) {
     if (user !== friend) {
       try {
@@ -93,7 +150,12 @@ export class UserService {
     const result = await this.matchPassword(password, user.password);
     if (result === true) {
       const token = await this.auth.generateJwt(user);
-      return { userId: user._id, username: user.username, accessToken: token };
+      return {
+        userId: user._id,
+        username: user.username,
+        accessToken: token,
+        stripeCustomerId: user.stripeCustomerId,
+      };
     } else {
       return { message: 'error logging in' };
     }

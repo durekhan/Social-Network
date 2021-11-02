@@ -38,6 +38,10 @@ export class AppModule implements NestModule {
         path: '/user/feed',
         method: RequestMethod.GET,
       },
+      {
+        path: '/user/charge',
+        method: RequestMethod.POST,
+      },
       { path: '/user/delete', method: RequestMethod.DELETE },
     );
   }

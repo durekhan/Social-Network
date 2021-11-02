@@ -23,6 +23,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { query } from 'express';
+import CreateChargeDto from 'src/dto/createCharge.dto';
 import { CreateLoginDto } from 'src/dto/login.dto';
 import { QueryEnum } from 'src/dto/query.enum';
 import { CreateUserDto } from 'src/dto/user.dto';
@@ -46,6 +47,26 @@ export class UserController {
       createUserDto.age,
       createUserDto.email,
       createUserDto.password,
+    );
+  }
+  @Post('/paid')
+  @ApiCreatedResponse({ description: 'User Registration Successful' })
+  @ApiBadRequestResponse({ description: 'any credential is missing' })
+  @ApiBody({ type: CreateUserDto })
+  signUpPaidCustomer(@Body(new ValidationPipe()) createUserDto: CreateUserDto) {
+    return this.userService.registerPaidUser(
+      createUserDto.username,
+      createUserDto.age,
+      createUserDto.email,
+      createUserDto.password,
+    );
+  }
+  @Post('/charge')
+  async createCharge(@Body() charge: CreateChargeDto, @Request() request) {
+    return await this.userService.charge(
+      charge.amount,
+      charge.paymentMethodId,
+      request.user.stripeCustomerId,
     );
   }
   //@UseGuards(JwtAuthGuard)

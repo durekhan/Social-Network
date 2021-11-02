@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://js.stripe.com/v3/"></script>
   </head>
   <body>
     <div id="v-app">
@@ -24,6 +25,7 @@
     </div>
 
     <script>
+      
       var app = new Vue({
   el: '#v-app',
   data: {
@@ -43,7 +45,9 @@
         }),
         headers: { 'Content-type': 'application/json' },
       });
+      
       const resp = await res.json();
+      // if(resp['stripeCustomerId']){
       this.socket.emit('newUser',resp['userId']);
       const feed = await fetch('/user/feed?keyword=steak&offset=1&limit=50',{
         method: 'GET',
@@ -53,11 +57,12 @@
       });
     const feedResult = await feed.json();
     this.posts=feedResult['feed'];
+    }
     },
     receiveMessage(msg) {
       alert('got a message!');
       this.posts.push(msg);
-    },
+    //},
   },
   created() {
     this.socket = io();

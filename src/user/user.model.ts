@@ -16,6 +16,8 @@ export class User {
   followers: User[];
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   followings: User[];
+  @Prop()
+  stripeCustomerId: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
