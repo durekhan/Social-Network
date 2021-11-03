@@ -16,6 +16,7 @@ import { AuthMiddleware } from './auth/middleware/auth.middleware';
 import { UserController } from './user/user.controller';
 import { PostController } from './post/post.controller';
 import { AppGateway } from './app.gateway';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 @Module({
   imports: [
     PassportModule,
@@ -24,6 +25,7 @@ import { AppGateway } from './app.gateway';
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.DB_URL),
     AuthModule,
+    EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService, AppGateway],
@@ -37,10 +39,6 @@ export class AppModule implements NestModule {
       {
         path: '/user/feed',
         method: RequestMethod.GET,
-      },
-      {
-        path: '/user/charge',
-        method: RequestMethod.POST,
       },
       { path: '/user/delete', method: RequestMethod.DELETE },
     );

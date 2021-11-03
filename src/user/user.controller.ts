@@ -62,11 +62,14 @@ export class UserController {
     );
   }
   @Post('/charge')
-  async createCharge(@Body() charge: CreateChargeDto, @Request() request) {
+  @ApiCreatedResponse({ description: 'Charging Successful' })
+  @ApiBadRequestResponse({ description: 'Charging unSuccessful' })
+  @ApiBody({ type: CreateChargeDto })
+  async createCharge(@Body() charge: CreateChargeDto, stripeId: string) {
     return await this.userService.charge(
       charge.amount,
       charge.paymentMethodId,
-      request.user.stripeCustomerId,
+      stripeId,
     );
   }
   //@UseGuards(JwtAuthGuard)
