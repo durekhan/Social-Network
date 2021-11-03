@@ -30,7 +30,7 @@ export class PostController {
     @Request() req,
     @Body(new ValidationPipe()) postDto: CreatePostDto,
   ) {
-    const socket = io();
+    const socket = io('https://enigmatic-chamber-04009.herokuapp.com/');
     const data = await this.postService.postData(postDto.content, req.user._id);
     socket.emit('msgToServer', { post: data, user: req.user });
     return { Post: `${postDto.content} is posted` };
